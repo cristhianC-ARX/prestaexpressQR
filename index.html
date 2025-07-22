@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR PRESTA EXPRESS - Cristhian</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff8c00 0%, #ffffff 50%, #ff8c00 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid rgba(255, 140, 0, 0.2);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.8em;
+            font-weight: 800;
+            text-align: center;
+            background: linear-gradient(135deg, #ff8c00, #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 140, 0, 0.2);
+        }
+
+        .section-title {
+            color: #495057;
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        input[type="url"], input[type="text"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus {
+            border-color: #ff8c00;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .option-card {
+            padding: 15px 10px;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .option-card:hover {
+            border-color: #ff8c00;
+            background: #fff5e6;
+        }
+
+        .option-card.active {
+            border-color: #ff8c00;
+            background: #ff8c00;
+            color: white;
+        }
+
+        .color-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+            justify-items: center;
+        }
+
+        .color-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.active {
+            border-color: #ff8c00;
+            transform: scale(1.1);
+        }
+
+        .color-option.active::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .frame-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .frame-option {
+            aspect-ratio: 1;
+            border: 2px solid #e1e1e1;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .frame-option:hover {
+            border-color: #ff8c00;
+        }
+
+        .frame-option.active {
+            border-color: #ff8c00;
+            background: #fff5e6;
+        }
+
+        .frame-simple { background: linear-gradient(45deg, #f8f9fa, #ffffff); }
+        .frame-gradient { background: linear-gradient(45deg, #ff8c00, #ff6b00); }
+        .frame-border { 
+            background: #ffffff;
+            border: 6px solid #333;
+            box-shadow: inset 0 0 0 3px #ff8c00;
+        }
+        .frame-rounded { 
+            background: #ff8c00;
+            border-radius: 15px;
+        }
+        .frame-shadow { 
+            background: #ffffff;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .frame-double { 
+            background: #ffffff;
+            border: 4px solid #ff8c00;
+            box-shadow: inset 0 0 0 2px #333;
+        }
+
+        .logo-upload-area {
+            border: 3px dashed #ff8c00;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #fff5e6;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-upload-area:hover {
+            border-color: #ff6b00;
+            background: #ffe6cc;
+        }
+
+        .logo-preview {
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo-upload-prompt {
+            color: #ff8c00;
+            font-weight: 600;
+        }
+
+        .logo-options {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 140, 0, 0.2);
+            margin-top: 10px;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .generate-btn:hover {
+            background: linear-gradient(135deg, #ff6b00 0%, #e55a00 100%);
+        }
+
+        .generate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .qr-result {
+            margin-top: 30px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            display: none;
+            text-align: center;
+            border: 2px solid rgba(255, 140, 0, 0.2);
+        }
+
+        .qr-result.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .qr-preview {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .success-message {
+            color: #155724;
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            font-weight: 600;
+        }
+
+        .download-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .download-btn, .share-btn {
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: none;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #218838 0%, #1ba085 100%);
+        }
+
+        .share-btn {
+            background: linear-gradient(135deg, #007bff 0%, #6f42c1 100%);
+            color: white;
+        }
+
+        .share-btn:hover {
+            background: linear-gradient(135deg, #0056b3 0%, #5a2d91 100%);
+        }
+
+        .loading {
+            display: none;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff8c00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .edit-section {
+            grid-column: 1 / -1;
+            margin-bottom: 20px;
+            background: #fff3cd;
+            border: 2px solid #ff8c00;
+        }
+
+        .edit-controls {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .editing-mode {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffe6cc;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .download-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 GENERADOR QR <br>PRESTA EXPRESS<br></h1>
+        
+        <form id="qrForm">
+            <!-- Sección de Edición -->
+            <div class="form-section edit-section">
+                <h3 class="section-title">📝 Editar QR Existente</h3>
+                
+                <div class="edit-controls">
+                    <div class="input-group" style="margin: 0;">
+                        <label for="savedQRSelect">QR guardado:</label>
+                        <select id="savedQRSelect">
+                            <option value="">Crear nuevo QR...</option>
+                        </select>
+                    </div>
+                    <button type="button" class="option-card" id="loadQRBtn" style="margin: 0; height: fit-content;">
+                        📂 Cargar
+                    </button>
+                    <button type="button" class="option-card" id="deleteQRBtn" style="margin: 0; height: fit-content; background: #e74c3c; color: white;">
+                        🗑️ Eliminar
+                    </button>
+                </div>
+                
+                <div id="editingMode" class="editing-mode">
+                    <strong>📝 Editando:</strong> <span id="editingQRName"></span>
+                    <button type="button" id="cancelEditBtn" style="float: right; background: none; border: none; color: #ff8c00; font-weight: bold; cursor: pointer;">✖️ Cancelar</button>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <!-- Contenido -->
+                <div class="form-section">
+                    <h3 class="section-title">🔗 Contenido</h3>
+                    
+                    <div class="input-group">
+                        <label for="urlInput">Enlace o texto:</label>
+                        <input type="url" id="urlInput" placeholder="https://ejemplo.com" required />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="legendInput">Leyenda:</label>
+                        <input type="text" id="legendInput" placeholder="¡Escanéame!" value="¡Escanéame!" />
+                    </div>
+
+                    <div class="input-group">
+                        <label for="qrNameInput">💾 Nombre para guardar:</label>
+                        <input type="text" id="qrNameInput" placeholder="Mi QR Personalizado" />
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>📏 Tamaño:</label>
+                        <div class="option-grid">
+                            <div class="option-card" data-size="300">Pequeño<br><small>300px</small></div>
+                            <div class="option-card active" data-size="400">Mediano<br><small>400px</small></div>
+                            <div class="option-card" data-size="500">Grande<br><small>500px</small></div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="logoInput">🎨 Logo Central:</label>
+                        <input type="file" id="logoInput" accept="image/*" style="display: none;" />
+                        <div class="logo-upload-area" id="logoUploadArea">
+                            <div class="logo-preview" id="logoPreview" style="display: none;">
+                                <img id="logoImage" style="max-width: 60px; max-height: 60px; border-radius: 8px;">
+                                <button type="button" id="removeLogo" style="position: absolute; top: -8px; right: -8px; background: #e74c3c; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; cursor: pointer;">✖</button>
+                            </div>
+                            <div class="logo-upload-prompt" id="logoUploadPrompt">
+                                <div style="font-size: 24px; margin-bottom: 5px;">📸</div>
+                                <strong>Subir Logo</strong><br>
+                                <small>PNG, JPG (Max 2MB)</small>
+                            </div>
+                        </div>
+                        
+                        <div class="logo-options" id="logoOptions" style="display: none;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                <div>
+                                    <label for="logoSize">Tamaño:</label>
+                                    <select id="logoSize">
+                                        <option value="15">Pequeño</option>
+                                        <option value="20" selected>Mediano</option>
+                                        <option value="25">Grande</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="logoShape">Forma:</label>
+                                    <select id="logoShape">
+                                        <option value="square">Cuadrado</option>
+                                        <option value="circle" selected>Círculo</option>
+                                        <option value="rounded">Redondeado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Diseño -->
+                <div class="form-section">
+                    <h3 class="section-title">🎨 Diseño</h3>
+                    
+                    <div class="input-group">
+                        <label>🌈 Color del QR:</label>
+                        <div class="color-group">
+                            <div class="color-option active" data-color="000000" style="background: #000000;"></div>
+                            <div class="color-option" data-color="ffffff" style="background: #ffffff; border-color: #ddd;"></div>
+                            <div class="color-option" data-color="ff8c00" style="background: #ff8c00;"></div>
+                            <div class="color-option" data-color="e74c3c" style="background: #e74c3c;"></div>
+                            <div class="color-option" data-color="2ecc71" style="background: #2ecc71;"></div>
+                            <div class="color-option" data-color="3498db" style="background: #3498db;"></div>
+                            <div class="color-option" data-color="9b59b6" style="background: #9b59b6;"></div>
+                            <div class="color-option" data-color="34495e" style="background: #34495e;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>🎨 Fondo del QR:</label>
+                        <div class="color-group">
+                            <div class="color-option active" data-bgcolor="ffffff" style="background: #ffffff; border-color: #ddd;"></div>
+                            <div class="color-option" data-bgcolor="ff8c00" style="background: #ff8c00;"></div>
+                            <div class="color-option" data-bgcolor="000000" style="background: #000000;"></div>
+                            <div class="color-option" data-bgcolor="f39c12" style="background: #f39c12;"></div>
+                            <div class="color-option" data-bgcolor="ffeaa7" style="background: #ffeaa7;"></div>
+                            <div class="color-option" data-bgcolor="74b9ff" style="background: #74b9ff;"></div>
+                            <div class="color-option" data-bgcolor="a29bfe" style="background: #a29bfe;"></div>
+                            <div class="color-option" data-bgcolor="fd79a8" style="background: #fd79a8;"></div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>🖼️ Marco:</label>
+                        <div class="frame-preview">
+                            <div class="frame-option frame-simple active" data-frame="simple">
+                                <div style="position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: bold;">Simple</div>
+                            </div>
+                            <div class="frame-option frame-gradient" data-frame="gradient">
+                                <div style="position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: bold; color: white;">Gradiente</div>
+                            </div>
+                            <div class="frame-option frame-border" data-frame="border">
+                                <div style="position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: bold;">Borde</div>
+                            </div>
+                            <div class="frame-option frame-rounded" data-frame="rounded">
+                                <div style="position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: bold; color: white;">Redondeado</div>
+                            </div>
+                            <div class="frame-option frame-shadow" data-frame="shadow">
+                                <div style="position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: bold;">Sombra</div>
+                            </div>
+                            <div class="frame-option frame-double" data-frame="double">
+                                <div style="position: absolute; bottom: 2px; left: 50%; transform: translateX(-50%); font-size: 8px; font-weight: bold;">Doble</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="legendSize">📱 Tamaño leyenda:</label>
+                        <select id="legendSize">
+                            <option value="18">Pequeña</option>
+                            <option value="24" selected>Mediana</option>
+                            <option value="30">Grande</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" class="generate-btn" id="generateBtn">
+                <span id="btnText">✨ Generar QR Profesional</span>
+            </button>
+        </form>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generando tu código QR...</p>
+        </div>
+        
+        <div class="qr-result" id="qrResult">
+            <div class="success-message">
+                🎉 <strong>¡Código QR creado exitosamente!</strong>
+            </div>
+            
+            <div class="qr-preview">
+                <div id="qrCode"></div>
+            </div>
+            
+            <div class="download-section">
+                <button class="download-btn" id="downloadBtn">💾 Descargar</button>
+                <button class="share-btn" id="shareBtn">📤 Compartir</button>
+                <button class="download-btn" id="saveQRBtn" style="background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); display: none;">💾 Guardar</button>
+            </div>
+        </div>
+
+            <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-sm"></p>
+                </div>
+                <div>
+                    <p class="text-sm"> Desarrollado por Cristhian Aguilar IT</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    </div>
+
+    <script>
+        // Configuración
+        const config = {
+            size: 400,
+            color: '000000',
+            bgcolor: 'ffffff',
+            frame: 'simple',
+            legendSize: 24,
+            logo: null,
+            logoSize: 20,
+            logoShape: 'circle'
+        };
+
+        let currentQRDataURL = '';
+        let editingQRId = null;
+        let logoImageData = null;
+
+        // Inicializar cuando la página carga
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedQRsList();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            // Sistema de edición
+            document.getElementById('savedQRSelect').addEventListener('change', function() {
+                if (this.value) {
+                    loadQRForEdit(parseInt(this.value));
+                } else {
+                    cancelEdit();
+                }
+            });
+
+            document.getElementById('loadQRBtn').addEventListener('click', function() {
+                const selectedIndex = document.getElementById('savedQRSelect').value;
+                if (selectedIndex) {
+                    loadQRForEdit(parseInt(selectedIndex));
+                } else {
+                    alert('Selecciona un QR para cargar');
+                }
+            });
+
+            document.getElementById('deleteQRBtn').addEventListener('click', function() {
+                const selectedIndex = document.getElementById('savedQRSelect').value;
+                if (selectedIndex) {
+                    deleteQR(parseInt(selectedIndex));
+                } else {
+                    alert('Selecciona un QR para eliminar');
+                }
+            });
+
+            document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
+
+            // Opciones de tamaño
+            document.querySelectorAll('[data-size]').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('[data-size]').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    config.size = parseInt(this.dataset.size);
+                });
+            });
+
+            // Opciones de color
+            document.querySelectorAll('[data-color]').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('[data-color]').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    config.color = this.dataset.color;
+                });
+            });
+
+            // Opciones de color de fondo
+            document.querySelectorAll('[data-bgcolor]').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('[data-bgcolor]').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    config.bgcolor = this.dataset.bgcolor;
+                });
+            });
+
+            // Opciones de marco
+            document.querySelectorAll('[data-frame]').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('[data-frame]').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    config.frame = this.dataset.frame;
+                });
+            });
+
+            // Tamaño de leyenda
+            document.getElementById('legendSize').addEventListener('change', function() {
+                config.legendSize = parseInt(this.value);
+            });
+
+            // Logo upload
+            document.getElementById('logoUploadArea').addEventListener('click', function() {
+                document.getElementById('logoInput').click();
+            });
+
+            document.getElementById('logoInput').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) handleLogoUpload(file);
+            });
+
+            document.getElementById('removeLogo').addEventListener('click', function(e) {
+                e.stopPropagation();
+                removeLogo();
+            });
+
+            document.getElementById('logoSize').addEventListener('change', function() {
+                config.logoSize = parseInt(this.value);
+            });
+
+            document.getElementById('logoShape').addEventListener('change', function() {
+                config.logoShape = this.value;
+            });
+
+            // Formulario principal
+            document.getElementById('qrForm').addEventListener('submit', handleFormSubmit);
+
+            // Botones de acción
+            document.getElementById('saveQRBtn').addEventListener('click', saveQR);
+            document.getElementById('downloadBtn').addEventListener('click', downloadQR);
+            document.getElementById('shareBtn').addEventListener('click', shareQR);
+        }
+
+        // Funciones del sistema de guardado
+        function saveQRToStorage(qrData) {
+            const savedQRs = JSON.parse(localStorage.getItem('savedQRs') || '[]');
+            savedQRs.push(qrData);
+            localStorage.setItem('savedQRs', JSON.stringify(savedQRs));
+            loadSavedQRsList();
+        }
+
+        function loadSavedQRsList() {
+            const savedQRs = JSON.parse(localStorage.getItem('savedQRs') || '[]');
+            const select = document.getElementById('savedQRSelect');
+            
+            select.innerHTML = '<option value="">Crear nuevo QR...</option>';
+            
+            savedQRs.forEach((qr, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = qr.name + ' - ' + qr.url.substring(0, 30) + (qr.url.length > 30 ? '...' : '');
+                select.appendChild(option);
+            });
+        }
+
+        function loadQRForEdit(index) {
+            const savedQRs = JSON.parse(localStorage.getItem('savedQRs') || '[]');
+            const qr = savedQRs[index];
+            
+            if (!qr) return;
+            
+            document.getElementById('urlInput').value = qr.url;
+            document.getElementById('legendInput').value = qr.legend;
+            document.getElementById('qrNameInput').value = qr.name;
+            
+            Object.assign(config, qr.config);
+            updateUIFromConfig();
+            
+            editingQRId = index;
+            document.getElementById('editingMode').style.display = 'block';
+            document.getElementById('editingQRName').textContent = qr.name;
+            document.getElementById('btnText').textContent = '✨ Actualizar QR';
+        }
+
+        function updateUIFromConfig() {
+            document.querySelectorAll('[data-size]').forEach(opt => {
+                opt.classList.toggle('active', parseInt(opt.dataset.size) === config.size);
+            });
+            
+            document.querySelectorAll('[data-color]').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.color === config.color);
+            });
+            
+            document.querySelectorAll('[data-bgcolor]').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.bgcolor === config.bgcolor);
+            });
+            
+            document.querySelectorAll('[data-frame]').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.frame === config.frame);
+            });
+            
+            document.getElementById('legendSize').value = config.legendSize;
+            
+            if (config.logo) {
+                showLogoPreview(config.logo);
+                document.getElementById('logoSize').value = config.logoSize || 20;
+                document.getElementById('logoShape').value = config.logoShape || 'circle';
+            }
+        }
+
+        function deleteQR(index) {
+            if (!confirm('¿Estás seguro de que quieres eliminar este QR?')) return;
+            
+            const savedQRs = JSON.parse(localStorage.getItem('savedQRs') || '[]');
+            savedQRs.splice(index, 1);
+            localStorage.setItem('savedQRs', JSON.stringify(savedQRs));
+            loadSavedQRsList();
+            
+            if (editingQRId === index) {
+                cancelEdit();
+            }
+        }
+
+        function cancelEdit() {
+            editingQRId = null;
+            document.getElementById('editingMode').style.display = 'none';
+            document.getElementById('savedQRSelect').value = '';
+            document.getElementById('btnText').textContent = '✨ Generar QR Profesional';
+            
+            document.getElementById('urlInput').value = '';
+            document.getElementById('legendInput').value = '¡Escanéame!';
+            document.getElementById('qrNameInput').value = '';
+        }
+
+        // Funciones de logo
+        function handleLogoUpload(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor, sube solo archivos de imagen');
+                return;
+            }
+            
+            if (file.size > 2 * 1024 * 1024) {
+                alert('El archivo es muy grande. Máximo 2MB');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                logoImageData = e.target.result;
+                config.logo = logoImageData;
+                showLogoPreview(logoImageData);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function showLogoPreview(imageSrc) {
+            const logoPreview = document.getElementById('logoPreview');
+            const logoImage = document.getElementById('logoImage');
+            const logoPrompt = document.getElementById('logoUploadPrompt');
+            const logoOptions = document.getElementById('logoOptions');
+            
+            logoImage.src = imageSrc;
+            logoPreview.style.display = 'block';
+            logoPrompt.style.display = 'none';
+            logoOptions.style.display = 'block';
+        }
+
+        function removeLogo() {
+            const logoPreview = document.getElementById('logoPreview');
+            const logoPrompt = document.getElementById('logoUploadPrompt');
+            const logoOptions = document.getElementById('logoOptions');
+            
+            logoImageData = null;
+            config.logo = null;
+            
+            logoPreview.style.display = 'none';
+            logoPrompt.style.display = 'block';
+            logoOptions.style.display = 'none';
+            
+            document.getElementById('logoInput').value = '';
+        }
+
+        // Generar QR
+        async function generateQR(text, options) {
+            const { size, color, bgcolor } = options;
+            const apiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${encodeURIComponent(text)}&format=png&color=${color}&bgcolor=${bgcolor}&margin=10`;
+            
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => resolve(img);
+                img.onerror = () => reject('Error al generar QR');
+                img.src = apiUrl;
+            });
+        }
+
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        function createFramedQR(qrImage, options) {
+            const { size, frame, legendSize } = options;
+            const legendText = document.getElementById('legendInput').value || '¡Escanéame!';
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            const frameWidth = 50;
+            const legendHeight = legendSize + 30;
+            const totalWidth = size + (frameWidth * 2);
+            const totalHeight = size + (frameWidth * 2) + legendHeight;
+            
+            canvas.width = totalWidth;
+            canvas.height = totalHeight;
+            
+            // Crear marco según el estilo
+            switch (frame) {
+                case 'gradient':
+                    const gradient = ctx.createLinearGradient(0, 0, totalWidth, totalHeight);
+                    gradient.addColorStop(0, '#ff8c00');
+                    gradient.addColorStop(1, '#ff6b00');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(0, 0, totalWidth, totalHeight);
+                    
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(frameWidth / 2, frameWidth / 2, totalWidth - frameWidth, size + frameWidth + (legendHeight / 2));
+                    break;
+                    
+                case 'border':
+                    ctx.fillStyle = '#ff8c00';
+                    ctx.fillRect(0, 0, totalWidth, totalHeight);
+                    
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(12, 12, totalWidth - 24, totalHeight - 24);
+                    
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(frameWidth / 2, frameWidth / 2, totalWidth - frameWidth, size + frameWidth);
+                    break;
+                    
+                case 'rounded':
+                    ctx.fillStyle = '#ff8c00';
+                    roundRect(ctx, 0, 0, totalWidth, totalHeight, 20);
+                    ctx.fill();
+                    
+                    ctx.fillStyle = '#ffffff';
+                    roundRect(ctx, frameWidth / 2, frameWidth / 2, totalWidth - frameWidth, size + frameWidth, 15);
+                    ctx.fill();
+                    break;
+                    
+                case 'shadow':
+                    ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                    ctx.shadowBlur = 15;
+                    ctx.shadowOffsetX = 5;
+                    ctx.shadowOffsetY = 5;
+                    
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(8, 8, totalWidth - 16, totalHeight - 16);
+                    ctx.shadowColor = 'transparent';
+                    break;
+                    
+                case 'double':
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, totalWidth, totalHeight);
+                    
+                    ctx.strokeStyle = '#ff8c00';
+                    ctx.lineWidth = 6;
+                    ctx.strokeRect(3, 3, totalWidth - 6, totalHeight - 6);
+                    
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = 3;
+                    ctx.strokeRect(frameWidth / 2 - 1, frameWidth / 2 - 1, totalWidth - frameWidth + 2, size + frameWidth + 2);
+                    break;
+                    
+                default:
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(0, 0, totalWidth, totalHeight);
+                    ctx.strokeStyle = '#e0e0e0';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(1, 1, totalWidth - 2, totalHeight - 2);
+                    break;
+            }
+            
+            // Dibujar QR
+            const qrX = frameWidth;
+            const qrY = frameWidth;
+            ctx.drawImage(qrImage, qrX, qrY, size, size);
+            
+            // Dibujar leyenda
+            const legendY = qrY + size + frameWidth;
+            
+            if (frame === 'gradient' || frame === 'border') {
+                ctx.fillStyle = '#ff8c00';
+                const legendBgY = legendY - 15;
+                
+                if (frame === 'border') {
+                    ctx.fillRect(0, legendBgY, totalWidth, legendHeight);
+                } else {
+                    ctx.fillRect(frameWidth / 2, legendBgY, totalWidth - frameWidth, legendHeight);
+                }
+            }
+            
+            ctx.fillStyle = (frame === 'gradient' || frame === 'border') ? '#000000' : '#333333';
+            ctx.font = `bold ${legendSize}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            const textY = legendY + (legendHeight / 2) - 15;
+            ctx.fillText(legendText, totalWidth / 2, textY);
+            
+            return canvas.toDataURL('image/png');
+        }
+
+        function addLogoToCanvas(canvas, logoSizePercent, logoShape) {
+            const ctx = canvas.getContext('2d');
+            const frameWidth = 50;
+            const qrX = frameWidth;
+            const qrY = frameWidth;
+            const qrSize = config.size;
+            
+            const logoImg = new Image();
+            logoImg.onload = function() {
+                const logoSizePx = (qrSize * logoSizePercent) / 100;
+                const logoX = qrX + (qrSize - logoSizePx) / 2;
+                const logoY = qrY + (qrSize - logoSizePx) / 2;
+                
+                // Fondo blanco circular
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(logoX + logoSizePx/2, logoY + logoSizePx/2, logoSizePx/2 + 8, 0, 2 * Math.PI);
+                ctx.fillStyle = '#ffffff';
+                ctx.fill();
+                
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#ff8c00';
+                ctx.stroke();
+                ctx.restore();
+                
+                // Dibujar logo con forma
+                ctx.save();
+                
+                if (logoShape === 'circle') {
+                    ctx.beginPath();
+                    ctx.arc(logoX + logoSizePx/2, logoY + logoSizePx/2, logoSizePx/2, 0, 2 * Math.PI);
+                    ctx.clip();
+                } else if (logoShape === 'rounded') {
+                    roundRect(ctx, logoX, logoY, logoSizePx, logoSizePx, 8);
+                    ctx.clip();
+                }
+                
+                ctx.drawImage(logoImg, logoX, logoY, logoSizePx, logoSizePx);
+                ctx.restore();
+                
+                currentQRDataURL = canvas.toDataURL('image/png');
+                showQRResult();
+            };
+            logoImg.src = logoImageData;
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            const urlInput = document.getElementById('urlInput');
+            const text = urlInput.value.trim();
+            
+            if (!text) {
+                alert('Por favor, ingresa un enlace o texto válido');
+                return;
+            }
+
+            const generateBtn = document.getElementById('generateBtn');
+            const loading = document.getElementById('loading');
+            
+            try {
+                generateBtn.disabled = true;
+                loading.style.display = 'block';
+                document.getElementById('qrResult').classList.remove('show');
+                
+                const qrImage = await generateQR(text, config);
+                currentQRDataURL = createFramedQR(qrImage, config);
+                
+                if (config.logo && logoImageData) {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const frameWidth = 50;
+                    const legendHeight = config.legendSize + 30;
+                    const totalWidth = config.size + (frameWidth * 2);
+                    const totalHeight = config.size + (frameWidth * 2) + legendHeight;
+                    
+                    canvas.width = totalWidth;
+                    canvas.height = totalHeight;
+                    
+                    const baseImage = new Image();
+                    baseImage.onload = function() {
+                        ctx.drawImage(baseImage, 0, 0);
+                        addLogoToCanvas(canvas, config.logoSize, config.logoShape);
+                    };
+                    baseImage.src = currentQRDataURL;
+                } else {
+                    showQRResult();
+                }
+                
+            } catch (error) {
+                alert('Error al generar el código QR');
+                loading.style.display = 'none';
+                generateBtn.disabled = false;
+            }
+        }
+
+        function showQRResult() {
+            const qrCode = document.getElementById('qrCode');
+            const qrResult = document.getElementById('qrResult');
+            const generateBtn = document.getElementById('generateBtn');
+            const loading = document.getElementById('loading');
+            
+            const displayImg = new Image();
+            displayImg.src = currentQRDataURL;
+            displayImg.style.maxWidth = '100%';
+            displayImg.style.height = 'auto';
+            displayImg.style.borderRadius = '10px';
+            
+            qrCode.innerHTML = '';
+            qrCode.appendChild(displayImg);
+            
+            if (editingQRId !== null) {
+                const savedQRs = JSON.parse(localStorage.getItem('savedQRs') || '[]');
+                const currentLegendText = document.getElementById('legendInput').value || '¡Escanéame!';
+                
+                savedQRs[editingQRId] = {
+                    name: document.getElementById('qrNameInput').value || `QR ${Date.now()}`,
+                    url: document.getElementById('urlInput').value,
+                    legend: currentLegendText,
+                    config: Object.assign({}, config),
+                    dataURL: currentQRDataURL,
+                    createdAt: savedQRs[editingQRId].createdAt,
+                    updatedAt: new Date().toISOString()
+                };
+                localStorage.setItem('savedQRs', JSON.stringify(savedQRs));
+                loadSavedQRsList();
+                
+                alert('¡QR actualizado exitosamente!');
+            } else {
+                document.getElementById('saveQRBtn').style.display = 'block';
+            }
+            
+            qrResult.classList.add('show');
+            qrResult.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            loading.style.display = 'none';
+            generateBtn.disabled = false;
+        }
+
+        function saveQR() {
+            const qrName = document.getElementById('qrNameInput').value;
+            const urlValue = document.getElementById('urlInput').value;
+            const legendValue = document.getElementById('legendInput').value || '¡Escanéame!';
+            
+            if (!qrName) {
+                alert('Por favor, ingresa un nombre para guardar el QR');
+                return;
+            }
+            
+            if (!currentQRDataURL) {
+                alert('Primero genera un QR para poder guardarlo');
+                return;
+            }
+            
+            const qrData = {
+                name: qrName,
+                url: urlValue,
+                legend: legendValue,
+                config: Object.assign({}, config),
+                dataURL: currentQRDataURL,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+            
+            saveQRToStorage(qrData);
+            alert('¡QR guardado exitosamente!');
+            
+            document.getElementById('saveQRBtn').style.display = 'none';
+        }
+
+        function downloadQR() {
+            if (!currentQRDataURL) return;
+            
+            const link = document.createElement('a');
+            const timestamp = new Date().toISOString().slice(0, 19).replace(/:/g, '-');
+            link.download = `QR-profesional-${timestamp}.png`;
+            link.href = currentQRDataURL;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        async function shareQR() {
+            if (!currentQRDataURL) return;
+            
+            try {
+                const response = await fetch(currentQRDataURL);
+                const blob = await response.blob();
+                const file = new File([blob], 'qr-code.png', { type: 'image/png' });
+                
+                if (navigator.share && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Mi Código QR',
+                        text: 'Mira este código QR que creé'
+                    });
+                } else {
+                    try {
+                        await navigator.clipboard.write([
+                            new ClipboardItem({ 'image/png': blob })
+                        ]);
+                        alert('¡Código QR copiado al portapapeles!');
+                    } catch (err) {
+                        alert('No se puede compartir. Usa el botón de descarga.');
+                    }
+                }
+            } catch (error) {
+                alert('Error al compartir. Intenta descargarlo.');
+            }
+        }
+    </script>
+</body>
+</html>
